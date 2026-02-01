@@ -1,8 +1,11 @@
 from flask import Blueprint, request, jsonify
 from app.models.ai_model import ai_model
+from app.models.history import History  # Import Model
+from app import db
 
 review_bp = Blueprint('review', __name__)
 
+# API 1: Dự đoán và Lưu vào DB
 @review_bp.route('/predict', methods=['POST'])
 def predict_review():
     try:
@@ -33,6 +36,21 @@ def predict_review():
         else:
             final_label = 'OR'  # Original (Thật)
 
+        # --- LƯU VÀO DATABASE (Code mới thêm) ---
+        try:
+            new_record = History(
+                text=review_text,
+                label=final_label,
+                confidence=confidence_val
+            )
+            db.session.add(new_record)
+            db.session.commit()
+            print("✅ Đã lưu kết quả vào Database!")
+        except Exception as db_err:
+            db.session.rollback() # Hoàn tác nếu lỗi DB
+            print(f"⚠️ Lỗi khi lưu DB: {db_err}")
+            # Vẫn trả về kết quả cho user dù lỗi lưu DB
+
         # 3. Trả kết quả về cho Frontend
         result = {
             'text': review_text,
@@ -47,4 +65,18 @@ def predict_review():
         print(f"🔥🔥🔥 LỖI BACKEND: {str(e)}")
         import traceback
         traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
+    
+# API 2: Lấy danh sách lịch sử (Cho tính năng sắp tới)
+@review_bp.route('/history', methods=['GET'])
+def get_history():
+    try:
+        # Lấy 10 dòng mới nhất, sắp xếp theo thời gian giảm dần
+        records = History.query.order_by(History.created_at.desc()).limit(10).all()
+        
+        # Chuyển đổi sang JSON
+        history_list = [record.to_json() for record in records]
+        
+        return jsonify(history_list), 200
+    except Exception as e:
         return jsonify({'error': str(e)}), 500

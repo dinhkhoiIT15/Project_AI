@@ -1,0 +1,70 @@
+.historyContainer {
+     margin-top: 30px;
+     text-align: left;
+     border-top: 1px solid #eee;
+     padding-top: 20px;
+}
+
+.heading {
+     font-size: 1.2rem;
+     color: #333;
+     margin-bottom: 15px;
+     text-align: center;
+}
+
+.listWrapper {
+     max-height: 300px;
+     /* Giới hạn chiều cao, nếu dài quá thì cuộn */
+     overflow-y: auto;
+     padding-right: 5px;
+}
+
+/* Tùy chỉnh thanh cuộn cho đẹp */
+.listWrapper::-webkit-scrollbar {
+     width: 6px;
+}
+
+.listWrapper::-webkit-scrollbar-thumb {
+     background-color: #ccc;
+     border-radius: 4px;
+}
+
+.item {
+     background: #f9f9f9;
+     border-left: 5px solid #ccc;
+     /* Đường viền màu mặc định */
+     padding: 10px;
+     margin-bottom: 10px;
+     border-radius: 4px;
+     font-size: 0.9rem;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Item Fake - Viền đỏ */
+.fakeItem {
+     border-left-color: #e74c3c;
+     background-color: #fff5f5;
+}
+
+/* Item Real - Viền xanh */
+.realItem {
+     border-left-color: #27ae60;
+     background-color: #f0fbf4;
+}
+
+.headerRow {
+     display: flex;
+     justify_content: space-between;
+     font-weight: bold;
+     margin-bottom: 5px;
+     font-size: 0.85rem;
+}
+
+.textPreview {
+     color: #555;
+     display: -webkit-box;
+     -webkit-line-clamp: 2;
+     /* Chỉ hiện tối đa 2 dòng nội dung */
+     -webkit-box-orient: vertical;
+     overflow: hidden;
+}
