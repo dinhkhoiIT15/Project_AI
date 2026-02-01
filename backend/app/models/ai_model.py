@@ -2,6 +2,8 @@ import joblib
 import os
 import sys
 
+from app.utils.text_processing import text_process
+
 # Lấy đường dẫn gốc để load model
 current_dir = os.path.dirname(os.path.abspath(__file__))
 # Đường dẫn đến file model .pkl
@@ -38,6 +40,9 @@ class AIModel:
         # Dự đoán xác suất (Độ tin cậy)
         proba = self.model.predict_proba([text])
         confidence = max(proba[0]) * 100  # Lấy % cao nhất
+
+        label = str(prediction)  # Ép thành string (ví dụ: "CG" hoặc "1")
+        confidence = float(confidence)
         
         return prediction, round(confidence, 2)
 

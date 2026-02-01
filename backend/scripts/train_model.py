@@ -31,7 +31,7 @@ def train():
         return
 
     df = pd.read_csv(DATA_PATH)
-    df = df.head(100) # Lấy 100 để test
+    # df = df.head(100) # Lấy 100 để test
     
     # Chuẩn hóa tên cột (dữ liệu mẫu có thể là 'text_', dữ liệu của bạn là 'text')
     if 'text_' in df.columns:
