@@ -1,0 +1,39 @@
+.container {
+     margin-top: 20px;
+     padding: 15px;
+     border-radius: 8px;
+     color: white;
+     animation: fadeIn 0.5s ease-out;
+     text-align: center;
+}
+
+/* Các class bổ trợ */
+.fake {
+     background-color: #e74c3c;
+     /* Đỏ */
+     box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+}
+
+.real {
+     background-color: #27ae60;
+     /* Xanh */
+     box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+}
+
+.title {
+     margin: 0 0 10px 0;
+     text-transform: uppercase;
+     font-size: 1.2rem;
+}
+
+@keyframes fadeIn {
+     from {
+          opacity: 0;
+          transform: translateY(10px);
+     }
+
+     to {
+          opacity: 1;
+          transform: translateY(0);
+     }
+}
