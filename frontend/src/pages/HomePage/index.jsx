@@ -1,73 +1,55 @@
-import React, { useState, useEffect} from 'react';
-import axiosClient from '../../api/axiosClient'; 
-import ResultCard from '../../components/ResultCard'; // Import từ folder mới
-import HistoryList from "../../components/HistoryList";
-import styles from './HomePage.module.css'; // Import CSS Module
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import authApi from '../../api/auth';
+import styles from './HomePage.module.css'; // Dùng lại style cũ hoặc tạo mới
 
 const HomePage = () => {
-  const [text, setText] = useState('');
-  const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
-  // State mới để chứa danh sách lịch sử
-  const [history, setHistory] = useState([]);
+  const navigate = useNavigate();
+  const userString = localStorage.getItem('user_info');
+  const user = userString ? JSON.parse(userString) : null;
 
-  // useEffect: Chạy 1 lần duy nhất khi trang vừa mở
-  useEffect(() => {
-    fetchHistory();
-  }, []);
-
-  const handleSubmit = async () => {
-    if (!text.trim()) return alert("Vui lòng nhập nội dung!");
-    setLoading(true);
-    try {
-      // 1. Gửi đi dự đoán
-      const response = await axiosClient.post('/predict', { text });
-      setResult(response.data);
-
-      // 2. Dự đoán xong thì tải lại lịch sử ngay lập tức
-      fetchHistory();
-    } catch (error) {
-      console.error(error);
-      alert("Lỗi kết nối Server!");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Hàm tải lịch sử từ Backend
-  const fetchHistory = async () => {
-    try {
-      const response = await axiosClient.get('/history');
-      setHistory(response.data);
-    } catch (error) {
-      console.error("Không thể tải lịch sử:", error);
-    }
+  const handleLogout = () => {
+    authApi.logout();
+    navigate('/login');
   };
 
   return (
     <div className={styles.pageContainer}>
-      <h1>AI Review Detector</h1>
-      
-      <textarea
-        className={styles.textArea}
-        rows="6"
-        placeholder="Nhập review tiếng Anh..."
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
-      
-      <button 
-        className={styles.checkButton}
-        onClick={handleSubmit} 
-        disabled={loading}
-      >
-        {loading ? 'Đang phân tích...' : '🔍 Kiểm tra ngay'}
-      </button>
+      <header style={{ marginBottom: '40px', borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>
+        {user ? (
+          <div>
+            <span>Xin chào, <b>{user.username}</b> ({user.role}) </span>
+            <button onClick={handleLogout} style={{marginLeft:'10px', cursor:'pointer'}}>Đăng xuất</button>
+          </div>
+        ) : (
+          <div>
+            <Link to="/login" style={{marginRight:'15px'}}>Đăng nhập</Link>
+            <Link to="/register">Đăng ký</Link>
+          </div>
+        )}
+      </header>
 
-      {/* Kết quả hiện tại */}
-      <ResultCard result={result} />
-      {/* --- THÊM DÒNG NÀY VÀO ĐỂ HIỂN THỊ LỊCH SỬ --- */}
-      <HistoryList historyData={history} />
+      <h1>🏠 TRANG CHỦ HỆ THỐNG</h1>
+      <p>Chào mừng bạn đến với hệ thống AI E-commerce.</p>
+
+      <div style={{marginTop: '30px', display: 'flex', gap: '20px', justifyContent: 'center'}}>
+        {/* Link dẫn đến các trang chức năng */}
+        <Link to="/dashboard/test" style={{
+            padding: '15px 30px', background: '#3498db', color: 'white', 
+            textDecoration: 'none', borderRadius: '5px', fontWeight: 'bold'
+        }}>
+           🔍 Vào công cụ Test Review
+        </Link>
+
+        {user?.role === 'admin' && (
+            <Link to="/admin" style={{
+                padding: '15px 30px', background: '#e74c3c', color: 'white', 
+                textDecoration: 'none', borderRadius: '5px', fontWeight: 'bold'
+            }}>
+               🛡️ Vào trang Admin
+            </Link>
+        )}
+      </div>
     </div>
   );
 };

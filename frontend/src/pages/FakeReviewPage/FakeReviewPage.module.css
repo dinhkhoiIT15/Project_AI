@@ -1,0 +1,47 @@
+.pageContainer {
+     max-width: 600px;
+     margin: 50px auto;
+     text-align: center;
+     background: white;
+     padding: 30px;
+     border-radius: 15px;
+     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.textArea {
+     width: 100%;
+     padding: 15px;
+     border: 2px solid #eee;
+     border-radius: 8px;
+     font-family: inherit;
+     font-size: 1rem;
+     margin-bottom: 20px;
+     box-sizing: border-box;
+     transition: border-color 0.3s;
+}
+
+.textArea:focus {
+     outline: none;
+     border-color: #3498db;
+}
+
+.checkButton {
+     background-color: #3498db;
+     color: white;
+     border: none;
+     padding: 12px 30px;
+     border-radius: 50px;
+     font-size: 1rem;
+     font-weight: bold;
+     cursor: pointer;
+     transition: transform 0.2s, background-color 0.2s;
+}
+
+.checkButton:hover {
+     background-color: #2980b9;
+}
+
+.checkButton:disabled {
+     background-color: #ccc;
+     cursor: not-allowed;
+}
